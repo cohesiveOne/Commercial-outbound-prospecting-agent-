@@ -78,6 +78,15 @@ def write_report(accounts: list[dict], dropped: list[dict], meta: dict[str, Any]
         f"- Accounts surfaced: {len(accounts)} (dropped {len(dropped)})",
         f"- ZoomInfo credits used: {meta.get('credits_used', 'n/a')}",
         "",
+    ]
+    flagged = [a for a in accounts if a.get("draft_issues")]
+    if flagged:
+        lines += ["## ⚠ Draft issues — fix before sending", ""]
+        for a in flagged:
+            for issue in a["draft_issues"]:
+                lines.append(f"- {a.get('name', '')}: {issue}")
+        lines.append("")
+    lines += [
         "| # | Account | Sub-segment | Employees | Score | Tier | Why now |",
         "|---|---------|-------------|-----------|-------|------|---------|",
     ]

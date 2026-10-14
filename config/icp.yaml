@@ -7,8 +7,9 @@
 # starts failing, because guessed values cause ZoomInfo search errors.
 
 company:
-  name: Cohesive
-  # Offerings as configured in ZoomInfo GTM context (org 21511373).
+  name: Cohesive Components
+  # Offerings as configured in ZoomInfo GTM context (org 21511373). Approved facts and
+  # claims (certifications, equipment, partners, reference story) live in playbooks/_company.md.
   offerings:
     - Custom Die-Cut Components
     - EMI/RFI Shielding Solutions
@@ -16,10 +17,9 @@ company:
     - Molded Rubber & Plastic Parts
     - Thermal Interface Materials
   positioning: >-
-    Engineered converting partner for OEMs: precision die-cut, laminated and
-    molded components (gaskets, seals, thermal interface materials, EMI/RFI
-    shielding, medical-grade adhesive components) built to print, from
-    prototype through high-volume production.
+    Cohesive Components solves complex converting challenges by turning engineered
+    materials into high-performing, production-ready solutions with expertise,
+    speed, and seamless execution.
 
 # Guardrails applied to every run.
 run_defaults:
@@ -108,7 +108,8 @@ segments:
           - "direct-to-chip cooling"
           - "immersion cooling"
           - "cold plate"
-        applications: ["CDU cabinet & door gaskets", "manifold and quick-disconnect seals",
+        applications: ["die-cut anti-condensation insulation for chilled pipes (kitted)",
+                       "CDU cabinet & door gaskets", "manifold and quick-disconnect seals",
                        "thermal interface pads for pumps/VFDs", "EMI gaskets on control enclosures",
                        "acoustic and insulation die-cuts"]
       chillers:
@@ -119,7 +120,7 @@ segments:
           - "computer room air handler"
           - "data center cooling"
           - "free cooling"
-        applications: ["cabinet and panel gaskets", "closed-cell foam insulation",
+        applications: ["cabinet and panel gaskets", "closed-cell pipe and coil insulation",
                        "vibration isolation pads", "coil and fan shroud seals"]
       aisle_containment:
         label: Aisle Containment / Racks / Enclosures
@@ -130,7 +131,7 @@ segments:
           - "data center enclosures"
           - "airflow management"
         applications: ["blanking and brush seals", "door and panel edge gaskets",
-                       "flame-rated (UL 94) foam seals", "EMI shielding for enclosures"]
+                       "foam seals from UL 94-rated materials", "EMI shielding for enclosures"]
     zoominfo:
       industry_ids: ["mfg.industrialmachinery", "mfg.computers", "mfg.electronics",
                      "mfg.telecom", "telecom.internet"]
@@ -140,13 +141,13 @@ segments:
       scoop_topic_keys: [data_center, facilities_expansion, product_launch, manufacturing_operations]
     personas: [engineering, sourcing, operations, quality]
     value_props:
-      - Gaskets and seals that hold up to glycol/PG25 and dielectric fluids in CDUs and manifolds
-      - UL 94 V-0 / HF-1 flame-rated foams and seals for containment and enclosures
+      - Proven in CDUs - engineered, kitted Armacell/3M anti-condensation insulation for a leading data center OEM (keep anonymous)
+      - Prototypes in 2 business days for in-stock materials; in-house UL 94, thermal and compression testing
       - Thermal interface materials and EMI gaskets for power electronics and controls
-      - Scale with AI-driven capacity ramps — prototype in days, production kitting line-side
+      - Scale with AI-driven capacity ramps - 42 flat bed + 19 rotary die cutters, assembly and kitting
     pains:
       - Liquid-cooling demand is outrunning supply chains; single-source gasket risk
-      - Leak prevention and fluid compatibility at higher rack densities
+      - Condensation on chilled pipes inside CDUs and chillers
       - Flammability / UL listing requirements on every enclosure material
 
   # -------------------------------------------------------------------- MEDICAL
@@ -183,10 +184,10 @@ segments:
       scoop_topic_keys: [product_launch, product_development, research_development, funding, certifications]
     personas: [engineering, sourcing, quality, operations]
     value_props:
-      - ISO 13485 converting of medical-grade adhesives, foams, films and silicones
-      - Long-wear skin adhesives for 7-14 day wear devices (CGM, patch pumps, ECG patches)
-      - Design-for-manufacture help from prototype to high-volume rotary converting
-      - Validated, documented processes that make your supplier audits easy
+      - ISO 13485 certified with cleanroom and controlled white room converting (Grand Rapids, MI)
+      - Direct access to medical-grade foams and adhesives (3M, Avery Dennison)
+      - Rotary, laser rotary and laminating capacity from prototype to high volume
+      - In-house PSA peel, tensile and tear testing to de-risk material choices
     pains:
       - Adhesive wear-time failures and skin irritation driving complaints
       - Scaling from clinical builds to commercial volume without re-validation
@@ -232,10 +233,10 @@ segments:
       scoop_topic_keys: [product_launch, facilities_expansion, funding, research_development, certifications]
     personas: [engineering, sourcing, quality, operations]
     value_props:
-      - AS9100-aligned converting with full lot traceability and FAI support
-      - Low-outgassing and MIL-spec EMI shielding materials
-      - Rapid prototyping for new programs and fast-turn spares
-      - ITAR-aware handling of controlled drawings
+      - AS9100 certified (Charlotte, NC); ITAR compliant at all Cohesive locations
+      - EMI and thermal materials from Parker Chomerics, Rogers and NeoGraf
+      - Prototypes in 2 business days for in-stock materials - new programs and fast-turn spares
+      - In-house resistivity, thermal conductivity and UL 94 burn testing
     pains:
       - Long-lead specialty materials delaying program milestones
       - EMI/thermal performance at shrinking size/weight
@@ -244,5 +245,17 @@ segments:
 # Accounts the agent must never prospect (customers in active deals, partners,
 # competitors). Domains are matched case-insensitively, www. ignored.
 exclusions:
-  domains: []
+  domains: ["nvent.com"]   # existing customer (CDU insulation reference) - never prospect
   competitors: []
+
+# Deterministic checks on outreach drafts (prospector/guardrails.py). A draft that
+# trips one is flagged in report.md and must be fixed before it goes out.
+outreach_guardrails:
+  banned_terms:            # case-insensitive; must never appear in outbound copy
+    - nVent                # reference customer must stay anonymous
+    - Saint-Gobain
+    - Novagard
+    - ITAR registered
+    - UL listed
+    - UL recognized
+  placeholder_marker: "[CONFIRM"   # unresolved playbook placeholder

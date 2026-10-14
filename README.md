@@ -70,9 +70,12 @@ HubSpot CSVs   (final rank)        3-step drafts       eng · sourcing · qualit
    `Prospect Tier`, `Why Now`, `ZoomInfo Company ID`. On contacts, create `Buying Role` and
    `ZoomInfo Contact ID`.
 4. **Python helpers.** Run `pip install -e '.[dev]'`, then `pytest`.
-5. **Fill in the playbooks.** Replace every `[CONFIRM: …]` in `playbooks/*.md` with approved
-   certifications, lead times and reference customers. Until you do, those placeholders
-   appear in the drafts.
+5. **Approved claims.** `playbooks/_company.md` holds the confirmed facts: certifications by
+   site, 2-day prototypes on in-stock materials, equipment, in-house testing, the approved
+   material partners, and the anonymous data center CDU reference story. It also holds the
+   never-say list. Update that file when facts change. `prospector process` flags any
+   draft containing a banned term (`config/icp.yaml → outreach_guardrails`) or a leftover
+   `[CONFIRM` placeholder.
 
 ## Tuning
 

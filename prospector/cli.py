@@ -15,6 +15,7 @@ from pathlib import Path
 
 from .dedupe import dedupe_accounts, load_ledger, save_ledger
 from .export import write_hubspot_csvs, write_report
+from .guardrails import check_drafts
 from .icp import get_segment, load_icp
 from .scoring import score_account
 
@@ -62,6 +63,7 @@ def cmd_process(args) -> int:
     for acct in keep:
         if acct.get("domain") in outreach:
             acct["outreach"] = outreach[acct["domain"]]
+            acct["draft_issues"] = check_drafts(acct["outreach"], icp)
         result = score_account(acct, segment_key, icp)
         sub = seg["sub_segments"].get(acct.get("sub_segment") or "", {})
         acct.update(result.as_dict())
@@ -87,8 +89,9 @@ def cmd_process(args) -> int:
     report = write_report(keep, dropped, meta, run)
 
     tiers = {t: sum(1 for a in keep if a["tier"] == t) for t in ("A", "B", "C")}
+    draft_issues = sum(len(a.get("draft_issues") or []) for a in keep)
     print(json.dumps({"kept": len(keep), "dropped": len(dropped), "tiers": tiers,
-                      "report": str(report)}, indent=2))
+                      "draft_issues": draft_issues, "report": str(report)}, indent=2))
     return 0
 
 

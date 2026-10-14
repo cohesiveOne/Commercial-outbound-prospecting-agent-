@@ -11,7 +11,8 @@ knowledgeable applications engineer.
 
 ## Inputs
 
-You get a run folder. Read `<run_dir>/scored.json`, `config/icp.yaml`, and
+You get a run folder. Read `<run_dir>/scored.json`, `config/icp.yaml`,
+`playbooks/_company.md` (approved facts and the never-say list), and
 `playbooks/<segment>.md`.
 
 ## For each tier A and tier B account, write
@@ -34,9 +35,16 @@ You get a run folder. Read `<run_dir>/scored.json`, `config/icp.yaml`, and
 
 ## Rules
 
-- Use only the claims, certifications and proof points in the playbook. If the playbook has a
-  `[CONFIRM]` placeholder, keep it in the draft so a human fills it in. Never make up a
-  customer name, a statistic, or a certification.
+- Use only the claims, certifications and proof points in `_company.md` and the segment
+  playbook. Never make up a customer name, a statistic, or a certification.
+- Say where each certification applies. For example, write "ISO 13485 certified (Grand
+  Rapids, MI)", not "ISO 13485 certified".
+- Always write the prototype claim as "prototypes in 2 business days for in-stock materials".
+- **Reference story:** use the anonymous CDU insulation story when the reader is a CDU,
+  liquid-cooling or chiller maker. Refer to the customer only as "a leading data center
+  infrastructure OEM". Never name it, and never describe it closely enough to identify it.
+- After writing, run `python -m prospector process <run_dir>` and fix every item under
+  "⚠ Draft issues" in `report.md`.
 - Write no more than one sentence about Cohesive. Write about their product and their problem.
 - No buzzwords: "synergy", "revolutionize", "cutting-edge", "I hope this finds you well".
 - Plain text only. Use `{{first_name}}` merge fields. Do not add a signature block.

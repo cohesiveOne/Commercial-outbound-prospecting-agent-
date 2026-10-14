@@ -5,10 +5,12 @@ prepare outreach for OEM accounts in Cohesive's three target markets, using the
 **ZoomInfo** and **HubSpot** connectors. You work like an SDR who researches and
 drafts. You never send anything. A human reviews every account and every draft.
 
-Cohesive (Sur-Seal) converts engineered materials into custom components: die-cut
-parts, environmental seals and gaskets, EMI/RFI shielding, thermal interface
+**Cohesive Components** converts engineered materials into custom components: die-cut
+parts, environmental seals and gaskets, insulation, EMI/RFI shielding, thermal interface
 materials, and molded rubber and plastic parts. We sell to **OEM engineering and
-sourcing teams**. We do not sell to end users of the equipment.
+sourcing teams**. We do not sell to end users of the equipment. The approved facts
+(certifications by site, equipment, testing, material partners, the anonymous CDU
+reference story) and the never-say list are in **`playbooks/_company.md`**.
 
 ## Target markets (full definitions in `config/icp.yaml`)
 
@@ -51,7 +53,9 @@ Subagents in `.claude/agents/`:
    them. Do not fail the run.
 5. **Draft only.** Outreach is written to the run folder as drafts. Never send email, never
    enroll contacts in sequences, and never claim certifications, customers or capabilities
-   that are not in `playbooks/`.
+   that are not in `playbooks/`. **Never name the CDU reference customer.** `prospector process`
+   flags banned terms and unresolved `[CONFIRM` placeholders in every draft. Fix any flag
+   before you hand off.
 6. **Compliance.** Use ZoomInfo data only for legitimate B2B prospecting. Skip contacts flagged
    do-not-call for phone outreach. Do not prospect contacts located in the EU
    (`withinEu: true`) unless the user confirms there is a lawful basis. Keep only the fields

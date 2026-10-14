@@ -7,6 +7,7 @@ import pytest
 from prospector import cli
 from prospector.dedupe import dedupe_accounts
 from prospector.domains import normalize_domain
+from prospector.guardrails import check_drafts
 from prospector.icp import ICPError, load_icp, validate_icp
 from prospector.scoring import score_account
 
@@ -122,6 +123,24 @@ def test_dedupe_drops_crm_excluded_dupes_and_cooldown():
     assert reasons["C"] == "excluded domain"
     assert "cooldown" in reasons["D"]
     assert reasons["F"] == "mechanical contractor, not an OEM"
+
+
+def test_guardrails_flag_banned_terms_and_placeholders(icp):
+    drafts = [
+        {"step": 1, "subject": "CDU insulation", "body": "We did this for NVENT last year."},
+        {"step": 2, "subject": "Re: TIMs", "body": "Prototypes in [CONFIRM: days]."},
+        {"step": 3, "subject": "Clean", "body": "Since Innventure's update: prototypes in 2 business days."},
+    ]
+    issues = check_drafts(drafts, icp)
+    assert any("step 1" in i and "nVent" in i for i in issues)
+    assert any("step 2" in i and "placeholder" in i for i in issues)
+    assert not any("step 3" in i for i in issues)
+
+
+def test_reference_customer_is_excluded(icp):
+    keep, dropped = dedupe_accounts([{"name": "nVent", "website": "www.nvent.com"}],
+                                    excluded_domains=icp["exclusions"]["domains"], today=TODAY)
+    assert not keep and dropped[0]["drop_reason"] == "excluded domain"
 
 
 def test_process_end_to_end(tmp_path, monkeypatch):
