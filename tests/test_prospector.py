@@ -110,6 +110,7 @@ def test_dedupe_drops_crm_excluded_dupes_and_cooldown():
         {"name": "C", "website": "c.com"},
         {"name": "D", "website": "d.com"},
         {"name": "E", "website": "e.com"},
+        {"name": "F", "website": "f.com", "disqualify_reason": "mechanical contractor, not an OEM"},
     ]
     keep, dropped = dedupe_accounts(
         accounts, crm_domains=["www.b.com"], excluded_domains=["c.com"],
@@ -120,6 +121,7 @@ def test_dedupe_drops_crm_excluded_dupes_and_cooldown():
     assert reasons["B"] == "already in HubSpot"
     assert reasons["C"] == "excluded domain"
     assert "cooldown" in reasons["D"]
+    assert reasons["F"] == "mechanical contractor, not an OEM"
 
 
 def test_process_end_to_end(tmp_path, monkeypatch):

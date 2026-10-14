@@ -39,9 +39,16 @@ The scout merges results by ZoomInfo id. For each account it records `sub_segmen
 ## 2. Check HubSpot first: use the `crm-sync` subagent (read only)
 
 For each candidate domain, search HubSpot COMPANY on `domain`. Batch the domains with the `IN`
-operator, up to 100 values per filter. Write every domain that matches to `crm_domains.json`.
-Also record each match's `lifecyclestage` and `hs_lead_status`. Include those in the final
-summary as "already in CRM".
+operator, up to 100 values per filter. Then run the **name-token check** described in
+`crm-sync.md`. On the first live run, the domain filter alone missed 3 of the 15 accounts that
+were already in the CRM. Write every matching domain to `crm_domains.json`. Also record each
+match's `lifecyclestage` and `hs_lead_status`. Include those in the final summary as
+"already in CRM".
+
+If research rules an account out (it's a contractor or operator rather than an OEM, its
+parent is already a customer, or its HQ and engineering are outside the territory), set
+`disqualify_reason` on the account in `accounts.json`. Do not delete it. `process` lists it
+under Dropped with the reason.
 
 ## 3. First scoring pass (free data)
 
@@ -55,7 +62,11 @@ the target count.
 For the shortlist only:
 
 1. Call `enrich_company_signals` in batches of 10 ids with `signalTypes: ["SCOOP", "NEWS"]`
-   to get trigger events.
+   to get trigger events. Read every signal before using it:
+   - Count one event once, even when several outlets cover it.
+   - Drop name collisions. For example, "Wright Line" is also an NLRB legal doctrine.
+   - Treat negative news (cost cuts, layoffs) as context for the angle, not as a buying trigger.
+   - Watch for ownership changes, such as an acquisition by an existing customer.
    - Add each scoop or news item from the last `scoring.signal_lookback_days` to the account's
      `signals` list as `{type, title, date, url}`.
 2. Optionally, call `search_intent` with `signals.intent_topics` (free) and add any matches with

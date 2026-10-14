@@ -24,6 +24,20 @@ def save_ledger(ledger: dict[str, str], path: Path = LEDGER_PATH) -> None:
     path.write_text(json.dumps(ledger, indent=2, sort_keys=True), encoding="utf-8")
 
 
+def _dedupe_reason(key, domain, seen, excluded, crm, ledger, cooldown_days, today) -> str | None:
+    if key in seen:
+        return "duplicate in run"
+    if domain and domain in excluded:
+        return "excluded domain"
+    if domain and domain in crm:
+        return "already in HubSpot"
+    if domain in ledger:
+        last = datetime.strptime(ledger[domain], "%Y-%m-%d").date()
+        if (today - last).days < cooldown_days:
+            return f"surfaced {ledger[domain]} (cooldown {cooldown_days}d)"
+    return None
+
+
 def dedupe_accounts(accounts: Iterable[dict[str, Any]], *,
                     crm_domains: Iterable[str] = (),
                     excluded_domains: Iterable[str] = (),
@@ -41,17 +55,9 @@ def dedupe_accounts(accounts: Iterable[dict[str, Any]], *,
     for acct in accounts:
         domain = normalize_domain(acct.get("website") or acct.get("domain"))
         key = domain or (acct.get("zoominfo_id") and f"zi:{acct['zoominfo_id']}") or acct.get("name", "").lower()
-        reason = None
-        if key in seen:
-            reason = "duplicate in run"
-        elif domain and domain in excluded:
-            reason = "excluded domain"
-        elif domain and domain in crm:
-            reason = "already in HubSpot"
-        elif domain in ledger:
-            last = datetime.strptime(ledger[domain], "%Y-%m-%d").date()
-            if (today - last).days < cooldown_days:
-                reason = f"surfaced {ledger[domain]} (cooldown {cooldown_days}d)"
+        # disqualify_reason is set by the agent when research rules an account out.
+        reason = acct.get("disqualify_reason") or _dedupe_reason(
+            key, domain, seen, excluded, crm, ledger, cooldown_days, today)
         seen.add(key)
         if reason:
             dropped.append({**acct, "drop_reason": reason})

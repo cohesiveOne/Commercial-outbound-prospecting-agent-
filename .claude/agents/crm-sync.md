@@ -14,10 +14,24 @@ You keep HubSpot clean while the prospecting agent adds new accounts.
    operator, up to 100 domains per filter. Request the properties `name`, `domain`,
    `lifecyclestage`, `hs_lead_status`, `hubspot_owner_id`, `industry` and
    `n80_20_market_segments`.
-3. Some companies are stored under a different root domain. For those, also run a `query`
-   search on the company name and treat a close name match as a likely duplicate. Flag
-   these for the user. Do not drop them silently.
-4. Write the matched domains to `<run_dir>/crm_domains.json`. Return a table with each
+3. **Always run a name check too.** The domain filter is an exact match, and this portal stores
+   many domains with `www.`, in mixed case (`www.Silent-Aire.com`), or under a sister or regional
+   domain (`stulz-ats.com` for Stulz USA). Run `name` `CONTAINS_TOKEN` filters for the most
+   distinctive word in each company name. Use up to 5 filter groups per call, and skip generic
+   words like "Systems" or "Thermal". Read the matches by hand:
+   - **Same company, active record** (has an owner or a lifecycle stage): add its domain to
+     `crm_domains.json` so the account is dropped.
+   - **Same company, dormant record** (no owner, no stage, or a former name such as
+     Wakefield-Vette → Wakefield Thermal): keep the account. Put the note "re-engage and merge;
+     do not create a duplicate" in `why_now`.
+   - **Different company that shares a word** (Wright Medical vs. Wright Line): ignore it.
+4. **Check the parent company.** If research shows the account is owned by another company
+   (for example, LiquidStack is now part of Trane), search HubSpot for the parent. If the
+   parent is a customer or an open opportunity, set `disqualify_reason` to "route to <parent>
+   owner as an expansion lead" instead of prospecting it cold.
+5. Before redeeming contacts, search CONTACT on `email` with the `IN` operator for the people
+   chosen.
+6. Write the matched domains to `<run_dir>/crm_domains.json`. Return a table with each
    matched company, its owner, lifecycle stage, and lead status. A rep may want to know that
    a cold account already has an owner.
 
