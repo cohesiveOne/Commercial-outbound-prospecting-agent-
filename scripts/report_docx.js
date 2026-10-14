@@ -157,7 +157,7 @@ accounts.forEach((a, idx) => {
           `${c.first_name} ${c.last_name}`,
           c.title || "",
           c.persona_label || c.persona || "",
-          [c.email, c.do_not_call ? "(do not call)" : c.phone].filter(Boolean).join("\n").split("\n").map((l) => para(text(l, { size: 18 }))),
+          [c.email, c.do_not_call ? "(do not call)" : c.phone, c.note ? `⚠ ${c.note}` : ""].filter(Boolean).join("\n").split("\n").map((l) => para(text(l, { size: 18 }))),
         ]),
       ),
     );
