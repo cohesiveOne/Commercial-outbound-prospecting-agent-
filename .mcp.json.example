@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "ZoomInfo": {
+      "type": "http",
+      "url": "https://mcp.zoominfo.com/mcp"
+    },
+    "HubSpot": {
+      "type": "http",
+      "url": "https://mcp.hubspot.com/anthropic"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m prospector:*)",
+      "Bash(python -m prospector:*)",
+      "Bash(pytest:*)",
+      "mcp__ZoomInfo__lookup",
+      "mcp__ZoomInfo__get_gtm_context",
+      "mcp__ZoomInfo__search_companies",
+      "mcp__ZoomInfo__search_contacts",
+      "mcp__ZoomInfo__search_scoops",
+      "mcp__ZoomInfo__search_intent",
+      "mcp__ZoomInfo__find_similar_companies",
+      "mcp__ZoomInfo__get_recommended_contacts",
+      "mcp__HubSpot__get_user_details",
+      "mcp__HubSpot__search_crm_objects",
+      "mcp__HubSpot__search_properties"
+    ],
+    "ask": [
+      "mcp__HubSpot__manage_crm_objects"
+    ]
+  }
+}

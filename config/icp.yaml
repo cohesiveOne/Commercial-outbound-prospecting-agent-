@@ -1,0 +1,248 @@
+# Cohesive outbound prospecting — Ideal Customer Profile (ICP) definition.
+#
+# This file is the single source of truth the agent reads before every run.
+# Sales ops can edit it without touching code. ZoomInfo filter values below
+# (industry ids, scoop topic ids, intent topics) were verified against the
+# ZoomInfo `lookup` tool on 2026-10-14 — re-verify with `lookup` if a search
+# starts failing, because guessed values cause ZoomInfo search errors.
+
+company:
+  name: Cohesive
+  # Offerings as configured in ZoomInfo GTM context (org 21511373).
+  offerings:
+    - Custom Die-Cut Components
+    - EMI/RFI Shielding Solutions
+    - Environmental Seals & Gaskets
+    - Molded Rubber & Plastic Parts
+    - Thermal Interface Materials
+  positioning: >-
+    Engineered converting partner for OEMs: precision die-cut, laminated and
+    molded components (gaskets, seals, thermal interface materials, EMI/RFI
+    shielding, medical-grade adhesive components) built to print, from
+    prototype through high-volume production.
+
+# Guardrails applied to every run.
+run_defaults:
+  accounts_per_segment: 15        # accounts surfaced per segment per run
+  contacts_per_account: 4         # buying-committee members per account
+  max_redeem_credits_per_run: 60  # hard cap on ZoomInfo Data (Bulk) credits
+  min_fit_score_to_enrich: 50     # only spend credits on accounts >= this score (free-data scores top out ~70)
+  min_contact_accuracy: 85        # ZoomInfo contactAccuracyScore floor
+  default_countries: ["United States", "Canada"]
+  exclude_company_types: ["government", "education"]  # defense primes stay in via industry
+  draft_only: true                # agent never sends email; humans review drafts
+
+# Shared persona definitions (referenced by segments).
+personas:
+  engineering:
+    label: Design / Mechanical Engineering
+    titles: ["Mechanical Engineer", "Design Engineer", "Engineering Manager",
+             "Director of Engineering", "VP Engineering", "Product Development Engineer",
+             "Packaging Engineer", "R&D Manager"]
+    management_levels: ["Director", "Manager", "VP Level Exec", "Non Manager"]
+    role_in_deal: technical champion — writes the spec, approves the material
+  sourcing:
+    label: Sourcing / Procurement
+    titles: ["Commodity Manager", "Strategic Sourcing Manager", "Purchasing Manager",
+             "Director of Procurement", "Supply Chain Manager", "Buyer"]
+    management_levels: ["Director", "Manager", "VP Level Exec"]
+    role_in_deal: economic gatekeeper — qualifies and awards suppliers
+  quality:
+    label: Quality / Supplier Quality
+    titles: ["Supplier Quality Engineer", "Quality Manager", "Director of Quality"]
+    management_levels: ["Director", "Manager"]
+    role_in_deal: approves supplier (PPAP / FAI / ISO 13485 / AS9100 audits)
+  operations:
+    label: Operations / Manufacturing
+    titles: ["Manufacturing Engineer", "Operations Manager", "Plant Manager", "VP Operations"]
+    management_levels: ["Director", "Manager", "VP Level Exec"]
+    role_in_deal: cares about line-side delivery, kitting, cost-down
+
+# Scoring weights (0-100 total). Implemented in prospector/scoring.py.
+scoring:
+  weights:
+    industry_match: 25      # company sits in a target ZoomInfo industry
+    keyword_match: 25       # description hits segment product keywords
+    size_fit: 15            # employee count inside segment sweet spot
+    geography: 10           # HQ in a target country
+    signals: 20             # scoops / news / intent in the lookback window
+    persona_coverage: 5     # reachable buying-committee contacts exist
+  signal_lookback_days: 120
+  tiers:                    # tier thresholds on the final score
+    A: 75
+    B: 60
+    C: 45
+
+# ZoomInfo signal configuration (shared).
+signals:
+  # Intent topics actually configured on the Cohesive ZoomInfo tenant.
+  intent_topics: ["Supplier Management", "Global Procurement", "Supply Chain Management",
+                  "Quality Management", "Inventory Management"]
+  # Scoop types that indicate a sourcing opportunity for a component supplier.
+  scoop_types: ["Facilities Relocation / Expansion", "Product Launch", "Funding",
+                "Hiring Plans", "New Hire", "Partnership", "Mergers & Acquisitions (M&A)",
+                "Project", "Pain Point"]
+  # Scoop topic ids (from lookup fieldName "scoop-topics").
+  scoop_topic_ids:
+    data_center: "21"
+    facilities_expansion: "34"
+    product_launch: "81"
+    product_development: "61"
+    research_development: "93"
+    manufacturing_operations: "278"
+    sourcing_procurement: "314"
+    supply_chain: "178"
+    funding: "117"
+    certifications: "195"
+
+segments:
+  # ---------------------------------------------------------------- DATA CENTER
+  data_center:
+    label: Data Center Infrastructure
+    sub_segments:
+      cdu:
+        label: Coolant Distribution Units / Liquid Cooling
+        description_keywords:          # each line = one ZoomInfo companyDescription query
+          - "coolant distribution"
+          - "liquid cooling data center"
+          - "direct-to-chip cooling"
+          - "immersion cooling"
+          - "cold plate"
+        applications: ["CDU cabinet & door gaskets", "manifold and quick-disconnect seals",
+                       "thermal interface pads for pumps/VFDs", "EMI gaskets on control enclosures",
+                       "acoustic and insulation die-cuts"]
+      chillers:
+        label: Chillers / Precision Cooling / CRAH-CRAC
+        description_keywords:
+          - "chiller"
+          - "precision cooling"
+          - "computer room air handler"
+          - "data center cooling"
+          - "free cooling"
+        applications: ["cabinet and panel gaskets", "closed-cell foam insulation",
+                       "vibration isolation pads", "coil and fan shroud seals"]
+      aisle_containment:
+        label: Aisle Containment / Racks / Enclosures
+        description_keywords:
+          - "aisle containment"
+          - "hot aisle"
+          - "server rack enclosures"
+          - "data center enclosures"
+          - "airflow management"
+        applications: ["blanking and brush seals", "door and panel edge gaskets",
+                       "flame-rated (UL 94) foam seals", "EMI shielding for enclosures"]
+    zoominfo:
+      industry_ids: ["mfg.industrialmachinery", "mfg.computers", "mfg.electronics",
+                     "mfg.telecom", "telecom.internet"]
+      employee_min: 50
+      employee_max: 25000
+      sweet_spot: [100, 5000]
+      scoop_topic_keys: [data_center, facilities_expansion, product_launch, manufacturing_operations]
+    personas: [engineering, sourcing, operations, quality]
+    value_props:
+      - Gaskets and seals that hold up to glycol/PG25 and dielectric fluids in CDUs and manifolds
+      - UL 94 V-0 / HF-1 flame-rated foams and seals for containment and enclosures
+      - Thermal interface materials and EMI gaskets for power electronics and controls
+      - Scale with AI-driven capacity ramps — prototype in days, production kitting line-side
+    pains:
+      - Liquid-cooling demand is outrunning supply chains; single-source gasket risk
+      - Leak prevention and fluid compatibility at higher rack densities
+      - Flammability / UL listing requirements on every enclosure material
+
+  # -------------------------------------------------------------------- MEDICAL
+  medical:
+    label: Medical Devices
+    sub_segments:
+      wearables:
+        label: Wearable Medical Devices
+        description_keywords:
+          - "wearable medical device"
+          - "continuous glucose monitor"
+          - "wearable biosensor"
+          - "patch pump"
+          - "remote patient monitoring wearable"
+          - "on-body injector"
+        applications: ["skin-contact adhesive die-cuts (ISO 10993 biocompatible)",
+                       "multi-layer laminated patches", "sensor housings gaskets",
+                       "EMI shielding for wireless electronics", "release liners and pull tabs"]
+      wound_care:
+        label: Advanced Wound Care
+        description_keywords:
+          - "advanced wound care"
+          - "wound dressings"
+          - "negative pressure wound therapy"
+          - "silicone adhesive dressing"
+          - "ostomy"
+        applications: ["foam and hydrocolloid die-cuts", "silicone adhesive laminations",
+                       "NPWT drape and port components", "island dressing converting"]
+    zoominfo:
+      industry_ids: ["mfg.medical", "mfg.pharmaceuticals"]
+      employee_min: 20
+      employee_max: 50000
+      sweet_spot: [50, 5000]
+      scoop_topic_keys: [product_launch, product_development, research_development, funding, certifications]
+    personas: [engineering, sourcing, quality, operations]
+    value_props:
+      - ISO 13485 converting of medical-grade adhesives, foams, films and silicones
+      - Long-wear skin adhesives for 7-14 day wear devices (CGM, patch pumps, ECG patches)
+      - Design-for-manufacture help from prototype to high-volume rotary converting
+      - Validated, documented processes that make your supplier audits easy
+    pains:
+      - Adhesive wear-time failures and skin irritation driving complaints
+      - Scaling from clinical builds to commercial volume without re-validation
+      - Supplier quality documentation for FDA / MDR submissions
+
+  # ------------------------------------------------------- AEROSPACE / DEFENSE
+  aerospace_defense:
+    label: Aerospace, Satellite & Defense
+    sub_segments:
+      satellite_space:
+        label: Satellite / Space Systems
+        description_keywords:
+          - "satellite"
+          - "spacecraft"
+          - "launch vehicle"
+          - "space systems"
+        applications: ["low-outgassing (ASTM E595) gaskets and TIMs", "EMI/RFI shielding gaskets",
+                       "thermal pads for avionics", "vibration damping die-cuts"]
+      defense_electronics:
+        label: Defense Electronics / Avionics
+        description_keywords:
+          - "defense electronics"
+          - "avionics"
+          - "radar systems"
+          - "military electronics"
+          - "rugged computing"
+        applications: ["MIL-DTL-83528 EMI gaskets", "environmental seals (MIL-STD-810)",
+                       "thermal interface materials", "connector and enclosure gaskets"]
+      aerostructures:
+        label: Aircraft & UAV
+        description_keywords:
+          - "unmanned aerial"
+          - "aircraft interiors"
+          - "aerostructures"
+          - "eVTOL"
+        applications: ["FAR 25.853 flame-rated seals", "lightweight foam components",
+                       "wire harness and panel gaskets"]
+    zoominfo:
+      industry_ids: ["mfg.aerospace", "mfg.electronics", "mfg.testequipment", "mfg.telecom"]
+      employee_min: 50
+      employee_max: 100000
+      sweet_spot: [100, 10000]
+      scoop_topic_keys: [product_launch, facilities_expansion, funding, research_development, certifications]
+    personas: [engineering, sourcing, quality, operations]
+    value_props:
+      - AS9100-aligned converting with full lot traceability and FAI support
+      - Low-outgassing and MIL-spec EMI shielding materials
+      - Rapid prototyping for new programs and fast-turn spares
+      - ITAR-aware handling of controlled drawings
+    pains:
+      - Long-lead specialty materials delaying program milestones
+      - EMI/thermal performance at shrinking size/weight
+      - Qualifying a second source without re-qualifying the design
+
+# Accounts the agent must never prospect (customers in active deals, partners,
+# competitors). Domains are matched case-insensitively, www. ignored.
+exclusions:
+  domains: []
+  competitors: []
