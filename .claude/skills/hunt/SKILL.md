@@ -94,6 +94,8 @@ only for contacts with `hasEmail` set, within the credit budget. Tag each contac
 
 ## 7. Hand off
 
+Run `node scripts/report_docx.js <run_dir>` to build `report.docx`, the Word review copy with approve/edit/reject boxes under every draft. Send that file to the user along with the CSVs.
+
 Show the user:
 
 - The ranked table from `report.md`: account, sub-segment, score, tier, why now.

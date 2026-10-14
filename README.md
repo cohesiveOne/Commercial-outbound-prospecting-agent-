@@ -41,8 +41,9 @@ HubSpot CSVs   (final rank)        3-step drafts       eng · sourcing · qualit
 5. **Draft.** The agent writes a 3-step email sequence and a LinkedIn note for each tier A
    and tier B account. Each draft opens with the account's dated trigger event. Drafts use
    only the claims in `playbooks/`.
-6. **Hand off.** The agent produces `report.md`, `hubspot_companies.csv` and
-   `hubspot_contacts.csv`, then pushes to HubSpot after you approve.
+6. **Hand off.** The agent produces `report.docx` (a Word review copy with approve/edit/reject
+   boxes under each draft, from `node scripts/report_docx.js <run_dir>`), `report.md`,
+   `hubspot_companies.csv` and `hubspot_contacts.csv`, then pushes to HubSpot after you approve.
 
 ## Commands
 
