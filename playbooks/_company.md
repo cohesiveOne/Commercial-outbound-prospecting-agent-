@@ -54,22 +54,40 @@ testing and performance validation *before* the customer commits to production.
 
 Silicone, foam, sponge, rubber, plastic, cork, tape, tubing, film, graphite, felt and textiles.
 
-**Material partners we may name:** 3M · Armacell · Rogers · Avery Dennison · Parker Chomerics ·
-NeoGraf · Worldwide Foam.
+**Preferred material partners (lead with these):** 3M · Armacell · Rogers · Avery Dennison ·
+Parker Chomerics · NeoGraf · Worldwide Foam.
+
+**Additional material science partners (name them only when relevant):** Saint-Gobain ·
+Novagard. Use them when the prospect's spec, incumbent material or application points to them,
+for example a Saint-Gobain foam or tape on their drawing, or a Novagard silicone or sealant.
+Don't list them by default.
+
+**Private-label materials (use only when relevant):** Sur-Cool™ · Sur-Sil™ · Sur-Flex™. Mention
+one only as a cost-down or alternate-material option, and only if the reader's application
+fits. Never describe their properties beyond what the product sheet says.
 
 ## Certifications and locations
 
 | Certification | Site |
 |---|---|
 | ISO 9001:2015 | All Cohesive locations |
-| ITAR compliant | All Cohesive locations |
+| ITAR compliant | **US locations only:** Charlotte NC, Cincinnati OH, Harrison OH, Grand Rapids MI |
 | AS9100 (aerospace) | Charlotte, NC |
 | ISO 14001 (environmental) | Charlotte, NC |
 | ISO 13485 (medical), cleanroom converting, controlled white room converting | Grand Rapids, MI |
 | IATF 16949 (automotive) | Grand Rapids, MI |
 
-**Locations:** Charlotte NC · Cincinnati OH · Harrison OH (distribution center) · Grand Rapids MI ·
-Apodaca, Nuevo León MX · Nuevo Laredo, Tamaulipas MX · Shanghai, China.
+| Location | Role |
+|---|---|
+| Charlotte, NC | Manufacturing |
+| Cincinnati, OH | Manufacturing |
+| Grand Rapids, MI | Manufacturing |
+| Harrison, OH | Distribution center |
+| Apodaca, Nuevo León, MX and Nuevo Laredo, Tamaulipas, MX | 3PL warehouses (not manufacturing) |
+| Shanghai, China | Sourcing office (not manufacturing) |
+
+For ITAR or defense work, say "ITAR compliant at our US locations" and point to Charlotte
+(AS9100) for aerospace programs.
 
 ## Reference story: data center CDU insulation (keep the customer anonymous)
 
@@ -86,10 +104,10 @@ established CDU manufacturers."
 
 - **The customer's name in the CDU story.** Never write it, hint at it, or describe it so it
   could be identified. `config/icp.yaml → outreach_guardrails.banned_terms` enforces this.
-- Saint-Gobain or Novagard. They appear in the deck as secondary partners but are not approved
-  to name.
-- Private-label brand names, ownership or financial details, or sales mix by market.
-- "ITAR registered." The approved wording is **ITAR compliant**.
+- Ownership or financial details, or sales mix by market.
+- "ITAR registered." The approved wording is **ITAR compliant**. ITAR applies to US locations
+  only. Never say "all locations" or imply that Mexico or China is covered.
+- That Mexico or Shanghai manufactures parts. They are 3PL warehouses and a sourcing office.
 - That Cohesive holds a UL listing or recognition. We *test* to UL 94 in-house. Flame ratings
   belong to the material.
 - Fluid-compatibility or wear-time guarantees. Offer to test and validate instead.

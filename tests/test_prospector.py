@@ -137,6 +137,13 @@ def test_guardrails_flag_banned_terms_and_placeholders(icp):
     assert not any("step 3" in i for i in issues)
 
 
+def test_guardrails_block_itar_overreach(icp):
+    bad = [{"step": 1, "subject": "ITAR", "body": "We are ITAR compliant at all Cohesive locations."}]
+    good = [{"step": 1, "subject": "ITAR", "body": "We are ITAR compliant at our US locations."}]
+    assert check_drafts(bad, icp)
+    assert not check_drafts(good, icp)
+
+
 def test_reference_customer_is_excluded(icp):
     keep, dropped = dedupe_accounts([{"name": "nVent", "website": "www.nvent.com"}],
                                     excluded_domains=icp["exclusions"]["domains"], today=TODAY)

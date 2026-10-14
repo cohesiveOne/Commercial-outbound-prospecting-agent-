@@ -27,9 +27,11 @@ interiors and aerostructures.
 ## Proof points (confirmed)
 
 - **AS9100 certified** at our Charlotte, NC site. **ISO 9001:2015** at all locations.
-- **ITAR compliant** at all Cohesive locations.
+- **ITAR compliant** at our US locations (Charlotte NC, Cincinnati OH, Harrison OH, Grand
+  Rapids MI). Do not extend this to Mexico or China.
 - **EMI and thermal material partners:** Parker Chomerics (EMI shielding), Rogers, NeoGraf
-  (graphite thermal management), 3M.
+  (graphite thermal management), 3M. Saint-Gobain and Novagard (sealants and silicones) are
+  available when a spec calls for them.
 - **In-house testing:** surface and volume resistivity (EMI), thermal conductivity and thermal
   impedance, UL 94 burn testing, compression set, and FTIR.
 - **Prototypes in 2 business days** for in-stock materials. Useful for new programs and
@@ -48,5 +50,5 @@ interiors and aerostructures.
 
 - **"Qualifying a new supplier takes too long."** Start with build-to-print parts that carry
   the least qualification burden, or with a new program before its design freezes.
-- **"We need ITAR handling."** All Cohesive locations are ITAR compliant. For AS9100 work,
-  that's our Charlotte, NC site.
+- **"We need ITAR handling."** Our US locations are ITAR compliant, and controlled work stays
+  in the US. For AS9100 work, that's our Charlotte, NC site.

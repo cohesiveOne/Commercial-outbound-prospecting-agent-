@@ -233,7 +233,7 @@ segments:
       scoop_topic_keys: [product_launch, facilities_expansion, funding, research_development, certifications]
     personas: [engineering, sourcing, quality, operations]
     value_props:
-      - AS9100 certified (Charlotte, NC); ITAR compliant at all Cohesive locations
+      - AS9100 certified (Charlotte, NC); ITAR compliant at US locations (not Mexico/China)
       - EMI and thermal materials from Parker Chomerics, Rogers and NeoGraf
       - Prototypes in 2 business days for in-stock materials - new programs and fast-turn spares
       - In-house resistivity, thermal conductivity and UL 94 burn testing
@@ -253,9 +253,9 @@ exclusions:
 outreach_guardrails:
   banned_terms:            # case-insensitive; must never appear in outbound copy
     - nVent                # reference customer must stay anonymous
-    - Saint-Gobain
-    - Novagard
     - ITAR registered
+    - ITAR compliant at all     # ITAR is US locations only (Mexico = 3PL, China = sourcing office)
+    - all Cohesive locations    # true for ISO 9001 only; too easy to misapply in copy
     - UL listed
     - UL recognized
   placeholder_marker: "[CONFIRM"   # unresolved playbook placeholder
